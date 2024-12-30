@@ -1,3 +1,19 @@
+const MODULE_NAME = "raise-your-hand";
+
+function module_log(severity, message) {
+    let statement = MODULE_NAME + " | " + message;
+    switch(severity) {
+        case "error":
+            console.error(statement);
+            break;
+        case "warn":
+            console.warn(statement);
+            break;
+        default:
+            console.log(statement);
+    }
+}
+
 class Control {
     static dataControl = "raise-your-hand"
 
@@ -26,7 +42,7 @@ class View {
         .find("li");
         let player;
         for (const p of playerList) {
-            console.log(`... checking player list user ${$(p).attr("data-user-id")}`);
+            module_log("info", `... checking player list user ${$(p).attr("data-user-id")}`);
             if ($(p).attr("data-user-id") == userId) {
                 console.log("Match!");
                 player = p;
@@ -38,17 +54,17 @@ class View {
             if (this.raised === true) {
                 $(player)
                     .children()
-                    .find(`#raised`)
+                    .find(`#raised`) // should be able to use 'input[state="raised"]'
                     .remove();
                 this.raised = false;
-                console.log(`player ${$(player).attr("data-user-id")} has lowered their hand`);
+                module_log("info", `player ${$(player).attr("data-user-id")} has lowered their hand`);
             } else {
                 $(player)
                     .children()
                     .last()
                     .prepend(`<span id="raised">${this.symbol}</span>`);
                 this.raised = true;
-                console.log(`player ${$(player).attr("data-user-id")} has raised their hand`);
+                module_log("info", `player ${$(player).attr("data-user-id")} has raised their hand`);
             }
         }
     }
@@ -58,4 +74,4 @@ Hooks.on('renderSceneControls', (controls, html) => {
     Control.Init(controls, html);
 });
 
-console.log("Raise Your Hand module loaded");
+module_log("info", "module loaded");
