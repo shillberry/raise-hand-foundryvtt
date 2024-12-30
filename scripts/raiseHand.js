@@ -89,9 +89,7 @@ class View {
         .find("li");
         let player;
         for (const p of playerList) {
-            module_log("info", `... checking player list user ${$(p).attr("data-user-id")}`);
             if ($(p).attr("data-user-id") == user._id) {
-                console.log("Match!");
                 player = p;
                 break;
             }
@@ -117,7 +115,13 @@ class View {
 }
 
 Hooks.on('renderSceneControls', (controls, html) => {
-    Control.Init(controls, html);
+    /* The model sets a flag in the user data, which triggers the updateUser hook.
+     * Since the GM may not have the typical trappings of a user, we disable
+     *  the control for the GM user.
+    */
+    if (!game.user.isGM) {
+        Control.Init(controls, html);
+    }
 });
 
 Hooks.once('ready', async function() {
