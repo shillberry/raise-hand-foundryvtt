@@ -13,13 +13,29 @@ class Control {
 
         html.find(".main-controls").append(handButton);
 
-        handButton[0].addEventListener('click', ev => View.Request(ev, html));
+        handButton[0].addEventListener('click', ev => View.HandleRequest(ev, game.userId));
     }    
 }
 
 class View {
-    static async Request(event, html) {
-        console.log(`player ${game.userId} has raised their hand`);
+    static async HandleRequest(event, userId) {
+        console.log(`player ${userId} has raised their hand`);
+
+        const playerList = $(document)
+        .find("aside#players.app")
+        .find("ol")
+        .find("li");
+        for (const player of playerList) {
+            const user = await fromUuid(`User.${$(player).attr("data-user-id")}`);
+            console.log(`... checking player list user ${user._id}`)
+            if (user._id == userId) {
+                console.log("Match!")
+                $(player)
+                .children()
+                .last()
+                .append(`<span>*</span>`);
+            }
+        }
     }
 }
 
