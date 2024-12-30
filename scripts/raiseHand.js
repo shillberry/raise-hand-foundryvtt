@@ -5,7 +5,7 @@ class Control {
 
         const handButton = $(
             `
-            <li class="scene-control sdr-scene-control" data-control="${this.dataControl}" title="Simple Dice Roller">
+            <li class="scene-control" data-control="${this.dataControl}" title="Raise Hand">
                 <i class="fa-solid fa-hand"></i>
             </li>
             `
@@ -13,7 +13,7 @@ class Control {
 
         html.find(".main-controls").append(handButton);
 
-        handButton[0].addEventListener('click', ev => View.HandleRequest(game.userId));
+        handButton[0].addEventListener('click', _ => View.HandleRequest(game.userId));
     }    
 }
 
