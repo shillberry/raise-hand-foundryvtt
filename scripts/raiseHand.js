@@ -15,7 +15,7 @@ function module_log(severity, message) {
 }
 
 class Control {
-    static dataControl = "raise-your-hand"
+    static dataControl = MODULE_NAME;
 
     static async Init(controls, html) {
 
@@ -29,8 +29,52 @@ class Control {
 
         html.find(".main-controls").append(handButton);
 
-        handButton[0].addEventListener('click', _ => View.HandleRequest(game.userId));
+        handButton[0].addEventListener('click', _ => Model.HandleRequest(game.userId));
+
+        module_log("info", "Control init complete");
     }    
+}
+
+class Model {
+    static #flagName = "handRaised";
+
+    static #getUserById(userId) {
+        return game.users.find(
+            (u) => u._id == userId
+        );
+    }
+
+    static async Init(userId) {
+        let user = this.#getUserById(userId);
+        if (user !== null) {
+            user.setFlag(MODULE_NAME, this.#flagName, false);
+            module_log("info", "Model init complete");
+        } else {
+            module_log("warn", "unable to set " + this.#flagName + " for user " + userId);
+        }
+    }
+
+    static IsHandRaised(userId) {
+        let user = this.#getUserById(userId);
+
+        if (user !== null) {
+            return user.getFlag(MODULE_NAME, this.#flagName);
+        } else {
+            module_log("warn", `unable to find user ${userId}`);
+            return null;
+        }
+    }
+
+    static async HandleRequest(userId) {
+        let user = this.#getUserById(userId);
+
+        if (user) {
+            let currentState = user.getFlag(MODULE_NAME, this.#flagName);
+            await user.setFlag(MODULE_NAME, this.#flagName, !currentState);
+            // tmp
+            View.HandleRequest(userId)
+        }
+    }
 }
 
 class View {
@@ -49,22 +93,25 @@ class View {
                 break;
             }
         }
-
+        
         if (player) {
-            if (this.raised === true) {
-                $(player)
-                    .children()
-                    .find(`#raised`) // should be able to use 'input[state="raised"]'
-                    .remove();
-                this.raised = false;
-                module_log("info", `player ${$(player).attr("data-user-id")} has lowered their hand`);
+            let state = Model.IsHandRaised(userId);
+            if (state !== null) {
+                 if (state === false) {
+                    let marker = $(player)
+                        .children()
+                        .find(`#raised`); // should be able to use 'input[state="raised"]'
+                    marker?.remove();
+                    module_log("info", `player ${userId} has lowered their hand`);
+                } else {
+                    $(player)
+                        .children()
+                        .last()
+                        .prepend(`<span id="raised">${this.symbol}</span>`);
+                    module_log("info", `player ${userId} has raised their hand`);
+                }
             } else {
-                $(player)
-                    .children()
-                    .last()
-                    .prepend(`<span id="raised">${this.symbol}</span>`);
-                this.raised = true;
-                module_log("info", `player ${$(player).attr("data-user-id")} has raised their hand`);
+                module_log("warn", `player ${userId} unknown request state`);
             }
         }
     }
@@ -73,5 +120,9 @@ class View {
 Hooks.on('renderSceneControls', (controls, html) => {
     Control.Init(controls, html);
 });
+
+Hooks.once('ready', async function() {
+    Model.Init(game.userId);
+})
 
 module_log("info", "module loaded");
