@@ -1,2 +1,4 @@
-# raise-hand-foundryvtt
-a simple module for raising requests in FoundryVTT
+# Raise Your Hand
+A simple module for "raising your hand" in FoundryVTT
+
+A button in the scene controls toggles a marker in the player list.

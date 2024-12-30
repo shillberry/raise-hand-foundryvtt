@@ -1,0 +1,16 @@
+{
+    "name": "raise-your-hand",
+    "title": "Raise Your Hand",
+    "description": "A Foundry VTT module for raising requests",
+    "version": "0.0.1",
+    "authors": [{ "name": "Scott Hillberry", "email": "" }],
+    "esmodules": ["scripts/raiseHand.js"],
+    "styles": [],
+    "manifest": "https://raw.githubusercontent.com/shillberry/raise-hand-foundryvtt/refs/heads/main/module.json",
+    "download": "https://github.com/shillberry/raise-hand-foundryvtt/archive/refs/heads/main.zip",
+    "compatibility": {
+        "minimum": "10",
+        "verified": "12.328",
+        "maximum": "12"
+    }
+}
