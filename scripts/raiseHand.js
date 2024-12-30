@@ -13,27 +13,42 @@ class Control {
 
         html.find(".main-controls").append(handButton);
 
-        handButton[0].addEventListener('click', ev => View.HandleRequest(ev, game.userId));
+        handButton[0].addEventListener('click', ev => View.HandleRequest(game.userId));
     }    
 }
 
 class View {
-    static async HandleRequest(event, userId) {
-        console.log(`player ${userId} has raised their hand`);
-
+    static symbol = "✋";
+    static async HandleRequest(userId) {
         const playerList = $(document)
         .find("aside#players.app")
         .find("ol")
         .find("li");
-        for (const player of playerList) {
-            const user = await fromUuid(`User.${$(player).attr("data-user-id")}`);
-            console.log(`... checking player list user ${user._id}`)
-            if (user._id == userId) {
-                console.log("Match!")
+        let player;
+        for (const p of playerList) {
+            console.log(`... checking player list user ${$(p).attr("data-user-id")}`);
+            if ($(p).attr("data-user-id") == userId) {
+                console.log("Match!");
+                player = p;
+                break;
+            }
+        }
+
+        if (player) {
+            if (this.raised === true) {
                 $(player)
-                .children()
-                .last()
-                .append(`<span>*</span>`);
+                    .children()
+                    .find(`#raised`)
+                    .remove();
+                this.raised = false;
+                console.log(`player ${$(player).attr("data-user-id")} has lowered their hand`);
+            } else {
+                $(player)
+                    .children()
+                    .last()
+                    .prepend(`<span id="raised">${this.symbol}</span>`);
+                this.raised = true;
+                console.log(`player ${$(player).attr("data-user-id")} has raised their hand`);
             }
         }
     }
