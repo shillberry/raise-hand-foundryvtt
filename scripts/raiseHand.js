@@ -16,23 +16,34 @@ function module_log(severity, message) {
 
 class Control {
     static dataControl = MODULE_NAME;
+    static button;
 
     static async Init(controls, html) {
 
-        const handButton = $(
+        const control = $(
             `
-            <li class="scene-control" data-control="${this.dataControl}" title="Raise Hand">
+            <li class="scene-control toggle" data-control="${this.dataControl}" title="Raise Hand">
                 <i class="fa-solid fa-hand"></i>
             </li>
             `
         );
 
-        html.find(".main-controls").append(handButton);
+        html.find(".main-controls").append(control);
+        this.button = control[0];
 
-        handButton[0].addEventListener('click', _ => Model.HandleRequest(game.userId));
+        this.button.addEventListener('click', _ => Model.HandleRequest(game.userId));
+        this.button.addEventListener('click', _ => this.Toggle());
 
         module_log("info", "Control init complete");
     }    
+
+    static async Toggle() {
+        if (this.button.classList.contains("active")) {
+            this.button.classList.remove("active");
+        } else {
+            this.button.classList.add("active");
+        }
+    }
 }
 
 class Model {
