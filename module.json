@@ -10,7 +10,7 @@
     "download": "https://github.com/shillberry/raise-hand-foundryvtt/archive/refs/heads/main.zip",
     "compatibility": {
         "minimum": "10",
-        "verified": "12.328",
+        "verified": "12.331",
         "maximum": "12"
     }
 }
