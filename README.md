@@ -42,6 +42,40 @@ flowchart LR
     view -- add ✋ --> stop
 ```
 
+```mermaid
+sequenceDiagram
+    actor player
+    box Raise Your Hand
+        participant control
+        participant view
+        participant model
+        participant module
+    end
+
+    player->>control: Click
+    activate control
+        control-)control: Toggle
+        control-)model: HandleRequest(userId)
+    deactivate control
+
+    model-)user: setFlag("handRaised", [true|false])
+
+    hookEvents-)+module: updateUser
+    module-)-ui: render player list
+
+    hookEvents-)+module: renderPlayerList
+    module-)-view: RedrawPlayerList
+    activate view
+        loop Each player
+            view->>model: Is hand raised?
+            model->>user: getFlag("handRaised")
+            user-->>model: 
+            model-->>view: 
+            view->>view: Add ✋
+        end
+    deactivate view
+```
+
 ## Limitations
 * The scene control button only appears for non-GM users.
 * The scene control button is not automatically sync'd to the hand state in the user data.
