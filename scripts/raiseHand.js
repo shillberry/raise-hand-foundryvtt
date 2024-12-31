@@ -75,7 +75,7 @@ class Model {
         let user = this.#getUserById(userId);
         if (user != null) {
             let currentState = user.getFlag(MODULE_NAME, this.#flagName);
-            await user.setFlag(MODULE_NAME, this.#flagName, !currentState);
+            user.setFlag(MODULE_NAME, this.#flagName, !currentState);
         }
     }
 }
@@ -117,16 +117,16 @@ Hooks.on('renderSceneControls', (controls, html) => {
 });
 
 Hooks.once('ready', async function() {
-    Model.Init(game.userId);
+    if (!game.user.isGM) {
+        Model.Init(game.userId);
+    }
 })
 
 Hooks.on("updateUser", (user) => {
-    module_log("info", `Received update for user ${user.name}`)
     ui.players.render();
 })
 
 Hooks.on("renderPlayerList", () => {
-    module_log("info", "Redrawing player list!");
     View.RedrawPlayerList();
 })
 
