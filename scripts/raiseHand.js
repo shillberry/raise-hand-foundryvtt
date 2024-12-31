@@ -58,7 +58,7 @@ class Model {
     static async Init(userId) {
         let user = this.#getUserById(userId);
         if (user !== null) {
-            user.setFlag(MODULE_NAME, this.#flagName, false);
+            this.RaiseHand(user, false)
             module_log("info", "Model init complete");
         }
     }
@@ -71,11 +71,15 @@ class Model {
         }
     }
 
+    static async RaiseHand(user, raised) {
+        user.setFlag(MODULE_NAME, this.#flagName, raised);
+    }
+
     static async HandleRequest(userId) {
         let user = this.#getUserById(userId);
         if (user != null) {
             let currentState = user.getFlag(MODULE_NAME, this.#flagName);
-            user.setFlag(MODULE_NAME, this.#flagName, !currentState);
+            this.RaiseHand(user, !currentState);
         }
     }
 }
@@ -119,6 +123,14 @@ Hooks.on('renderSceneControls', (controls, html) => {
 Hooks.once('ready', async function() {
     if (!game.user.isGM) {
         Model.Init(game.userId);
+    }
+})
+
+Hooks.on("userConnected", (user, connected) => {
+    // reset status when a user disconnects
+    // for now, let a connected GM take care of this
+    if (connected === false && game.user.isGM) {
+        Model.RaiseHand(user, false);
     }
 })
 

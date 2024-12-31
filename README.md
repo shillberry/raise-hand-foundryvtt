@@ -46,4 +46,4 @@ This module relies on two hook events:
 ## Limitations
 * The scene control button only appears for non-GM users.
 * The scene control button is not automatically sync'd to the hand state in the user data.
-* The hand state in the user data is not reset when a user disconnects. It is reset only when a user connects.
+* When a user reconnects, their hand state will be reset. When a user disconnects, the hand state will be reset if the GM is still connected.
