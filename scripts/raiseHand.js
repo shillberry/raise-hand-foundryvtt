@@ -75,40 +75,32 @@ class Model {
         let user = this.#getUserById(userId);
         if (user != null) {
             let currentState = user.getFlag(MODULE_NAME, this.#flagName);
-            await user.setFlag(MODULE_NAME, this.#flagName, !currentState);
+            user.setFlag(MODULE_NAME, this.#flagName, !currentState);
         }
     }
 }
 
 class View {
     static symbol = "✋";
-    static async HandleRequest(user) {
+    static async RedrawPlayerList() {
         const playerList = $(document)
         .find("aside#players.app")
         .find("ol")
         .find("li");
-        let player;
-        for (const p of playerList) {
-            if ($(p).attr("data-user-id") == user._id) {
-                player = p;
-                break;
-            }
-        }
-        
-        if (player) {
+        for (const player of playerList) {
+            const user = await fromUuid(`User.${$(player).attr("data-user-id")}`);
+
             let state = Model.IsHandRaised(user);
             if (state === false) {
                 let marker = $(player)
                     .children()
                     .find(`#raised`); // should be able to use 'input[state="raised"]'
                 marker?.remove();
-                module_log("info", `${user.name} has lowered their hand`);
-            } else {
+            } else if (state === true) {
                 $(player)
                     .children()
                     .last()
                     .prepend(`<span id="raised">${this.symbol}</span>`);
-                module_log("info", `${user.name} has raised their hand`);
             }
         }
     }
@@ -125,12 +117,17 @@ Hooks.on('renderSceneControls', (controls, html) => {
 });
 
 Hooks.once('ready', async function() {
-    Model.Init(game.userId);
+    if (!game.user.isGM) {
+        Model.Init(game.userId);
+    }
 })
 
 Hooks.on("updateUser", (user) => {
-    module_log("info", `Received update for user ${user.name}`)
-    View.HandleRequest(user);
+    ui.players.render();
+})
+
+Hooks.on("renderPlayerList", () => {
+    View.RedrawPlayerList();
 })
 
 module_log("info", "module loaded");
