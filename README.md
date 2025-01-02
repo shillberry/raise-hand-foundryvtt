@@ -26,12 +26,12 @@ flowchart LR
 
     %% UserData -- fire --> updateUser
 
-    updateUser -- on --> module
+    updateUser -.-> module
     module -- render --> ui.players
 
     %% ui.players -- fire --> renderPlayerList
 
-    renderPlayerList -- on --> view
+    renderPlayerList -.-> view
     view -- isHandRaised? --> model
     model -- getFlag --> UserData
 
