@@ -22,7 +22,7 @@ class Control {
 
         const control = $(
             `
-            <li class="scene-control toggle" data-control="${this.dataControl}" title="Raise Hand" data-tooltip="Raise Hand">
+            <li class="scene-control toggle" data-control="${this.dataControl}" data-tooltip="Raise Hand">
                 <i class="fa-solid fa-hand"></i>
             </li>
             `
