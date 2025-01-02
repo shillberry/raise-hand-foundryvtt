@@ -31,7 +31,7 @@ class Control {
         html.find(".main-controls").append(control);
         this.button = control[0];
 
-        this.button.addEventListener('click', _ => Model.HandleRequest(game.userId));
+        this.button.addEventListener('click', _ => Model.ToggleHandState(game.userId));
         this.button.addEventListener('click', _ => this.Toggle());
 
         module_log("info", "Control init complete");
@@ -75,7 +75,7 @@ class Model {
         user.setFlag(MODULE_NAME, this.#flagName, raised);
     }
 
-    static async HandleRequest(userId) {
+    static async ToggleHandState(userId) {
         let user = this.#getUserById(userId);
         if (user != null) {
             let currentState = user.getFlag(MODULE_NAME, this.#flagName);
