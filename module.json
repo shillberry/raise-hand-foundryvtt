@@ -5,7 +5,7 @@
     "version": "0.0.7",
     "authors": [{ "name": "Scott Hillberry", "email": "" }],
     "esmodules": [
-        "scripts/settings.js",
+        "scripts/module.js",
         "scripts/hooks.js",
         "scripts/components/control.js",
         "scripts/components/model.js",
