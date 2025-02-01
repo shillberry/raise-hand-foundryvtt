@@ -31,6 +31,10 @@ export class Control {
             this.button.classList.add("active");
             const audioFile = game.settings.get("raise-your-hand", "sound_effect");
             if (audioFile) {
+                // "true" indicates that a sound should be emitted for all clients
+                // The docs say that alternatively, "As an object, can configure which recipients should receive the event."
+                // There is no documentation on what the structure of such an object should be.
+                // https://foundryvtt.com/api/classes/foundry.audio.AudioHelper.html#play-2
                 game.audio.constructor.play({
                         src: audioFile
                     },
