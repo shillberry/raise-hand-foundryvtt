@@ -3,6 +3,17 @@ import { Control } from "./components/control.js";
 import { Model } from "./components/model.js";
 import { View } from "./components/view.js";
 
+Hooks.once('init', () => {
+    game.settings.register("raise-your-hand", "sound_effect", {
+        name: "Sound effect",
+        hint: "Sound to play when hand is raised. If blank, no sound is played.",
+        scope: "world",
+        type: String,
+        config: true
+    });
+})
+
+
 Hooks.on('renderSceneControls', (controls, html) => {
     /* The model sets a flag in the user data, which triggers the updateUser hook.
      * Since the GM may not have the typical trappings of a user, we disable
