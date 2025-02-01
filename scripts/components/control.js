@@ -29,7 +29,11 @@ export class Control {
             this.button.classList.remove("active");
         } else {
             this.button.classList.add("active");
-            game.audio.play(game.settings.get("raise-your-hand", "sound_effect"));
+                game.audio.constructor.play({
+                    src: game.settings.get("raise-your-hand", "sound_effect")
+                },
+                true
+            );
         }
     }
 }
