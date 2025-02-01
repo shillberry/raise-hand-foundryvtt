@@ -13,7 +13,6 @@ Hooks.once('init', () => {
     });
 })
 
-
 Hooks.on('renderSceneControls', (controls, html) => {
     /* The model sets a flag in the user data, which triggers the updateUser hook.
      * Since the GM may not have the typical trappings of a user, we disable
