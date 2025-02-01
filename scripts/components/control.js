@@ -1,4 +1,4 @@
-import { MODULE_NAME, module_log } from "../settings.js";
+import { MODULE_NAME, SOUND_EFFECT_SETTING_NAME, module_log } from "../module.js";
 import { Model } from "./model.js";
 
 export class Control {
@@ -29,6 +29,18 @@ export class Control {
             this.button.classList.remove("active");
         } else {
             this.button.classList.add("active");
+            const audioFile = game.settings.get(MODULE_NAME, SOUND_EFFECT_SETTING_NAME);
+            if (audioFile) {
+                // "true" indicates that a sound should be emitted for all clients
+                // The docs say that alternatively, "As an object, can configure which recipients should receive the event."
+                // There is no documentation on what the structure of such an object should be.
+                // https://foundryvtt.com/api/classes/foundry.audio.AudioHelper.html#play-2
+                game.audio.constructor.play({
+                        src: audioFile
+                    },
+                    true
+                );
+            }
         }
     }
 }

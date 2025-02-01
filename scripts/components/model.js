@@ -1,4 +1,4 @@
-import { MODULE_NAME, module_log } from "../settings.js";
+import { MODULE_NAME, module_log } from "../module.js";
 
 export class Model {
     static #flagName = "handRaised";

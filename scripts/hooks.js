@@ -1,7 +1,18 @@
-import { module_log } from "./settings.js";
+import { module_log, MODULE_NAME, SOUND_EFFECT_SETTING_NAME } from "./module.js";
 import { Control } from "./components/control.js";
 import { Model } from "./components/model.js";
 import { View } from "./components/view.js";
+
+Hooks.once('init', () => {
+    game.settings.register(MODULE_NAME, SOUND_EFFECT_SETTING_NAME, {
+        name: "Sound effect",
+        hint: "Sound to play when hand is raised. If blank, no sound is played.",
+        scope: "world",
+        type: String,
+        config: true,
+        default: "sounds/notify.wav"
+    });
+})
 
 Hooks.on('renderSceneControls', (controls, html) => {
     /* The model sets a flag in the user data, which triggers the updateUser hook.
