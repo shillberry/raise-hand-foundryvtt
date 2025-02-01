@@ -9,7 +9,8 @@ Hooks.once('init', () => {
         hint: "Sound to play when hand is raised. If blank, no sound is played.",
         scope: "world",
         type: String,
-        config: true
+        config: true,
+        default: "sounds/notify.wav"
     });
 })
 
